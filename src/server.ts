@@ -6,8 +6,14 @@ import { vehicleRoute } from "./modules/vehicles/vehicles.route";
 initDb();
 const app = express();
 
+app.use(express.json());
+
+app.get("/", (req: Request, res: Response) => {
+  res.send("Welcome to the Vehicle Rental Service API");
+});
+
 app.use("/api/v1/users", userRoute);
-app.use("/vehicles", vehicleRoute);
+app.use("/api/v1/vehicles", vehicleRoute);
 
 app.listen(3000, () => {
   console.log(`Server is running on port 3000`);
