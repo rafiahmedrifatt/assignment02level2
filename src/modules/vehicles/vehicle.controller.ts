@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { pool } from "../../database/db";
+import { pool } from "../../config/db";
 import { vehicleServices } from "./vehicle.service";
 import { updateLanguageServiceSourceFile } from "typescript";
 

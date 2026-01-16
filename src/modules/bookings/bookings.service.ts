@@ -1,4 +1,4 @@
-import { pool } from "../../database/db";
+import { pool } from "../../config/db";
 
 const createdBookings = async (req: any) => {
   const { vehicle_id, rent_start_date, rent_end_date, status } = req.body;
