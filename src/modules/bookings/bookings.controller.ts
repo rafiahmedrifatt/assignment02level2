@@ -20,7 +20,7 @@ const createdBookings = async (req: Request, res: Response) => {
 
 const getBookings = async (req: Request, res: Response) => {
   try {
-    const result = await bookingsService.getBookings(req, req.user.role);
+    const result = await bookingsService.getBookings(req, (req as any).user.role);
     res.status(200).json({
       success: true,
       message: "Bookings retrieved successfully",

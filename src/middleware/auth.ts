@@ -2,6 +2,14 @@ import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import config from "../config";
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: JwtPayload;
+    }
+  }
+}
+
 const auth = (...roles: string[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -12,7 +20,7 @@ const auth = (...roles: string[]) => {
       }
       const decoded = jwt.verify(
         token,
-        config.jwtSecret as string
+        config.jwtSecret as string,
       ) as JwtPayload;
 
       req.user = decoded;

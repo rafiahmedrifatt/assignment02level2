@@ -52,7 +52,7 @@ const createVehicle = async (req: Request, res: Response) => {
 
 const getSingleVehicles = async (req: Request, res: Response) => {
   try {
-    const vehicleId = req.params.id;
+    const vehicleId = req.params.id as string;
     const result = await vehicleServices.getSingleVehicles(vehicleId);
 
     if (result.rows.length === 0) {
@@ -71,7 +71,7 @@ const getSingleVehicles = async (req: Request, res: Response) => {
 
 const updateVehicle = async (req: Request, res: Response) => {
   try {
-    const vehicleId = req.params.id;
+    const vehicleId = req.params.id as string;
 
     const {
       vehicle_name,
@@ -112,7 +112,7 @@ const updateVehicle = async (req: Request, res: Response) => {
 };
 
 const deleteVehicle = async (req: Request, res: Response) => {
-  const vehicleId = req.params.id;
+  const vehicleId = req.params.id as string;
   try {
     const result = await vehicleServices.deleteVehicles(vehicleId);
     if (result.rowCount === 0) {
