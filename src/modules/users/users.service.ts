@@ -3,7 +3,7 @@ import { pool } from "../../config/db";
 
 const getAllUsers = async () => {
   const result = await pool.query(
-    `SELECT id, name, email, phone, role FROM users;`
+    `SELECT id, name, email, phone, role FROM users;`,
   );
   return result;
 };
@@ -13,17 +13,23 @@ const getAllUsers = async () => {
 //   return result;
 // };
 
-const updateUser = async (payload: any, userRole: string) => {
+const updateUser = async (payload: Record<string, any>, userRole: string) => {
   if (userRole === "admin") {
     const result = await pool.query(
       `UPDATE users SET name=$1, email=$2, phone=$3, role=$4 WHERE id=$5 RETURNING id, name, email, phone, role;`,
-      [payload.name, payload.email, payload.phone, userRole, payload.id]
+      [
+        payload.name,
+        payload.email,
+        payload.phone,
+        payload.role || userRole,
+        payload.id,
+      ],
     );
     return result;
   }
   const result = await pool.query(
-    `UPDATE users SET name=$1, email=$2, phone=$3 WHERE id=$5 RETURNING id, name, email, phone, role;`,
-    [payload.name, payload.email, payload.phone, payload.id]
+    `UPDATE users SET name=$1, email=$2, phone=$3 WHERE id=$4 RETURNING id, name, email, phone, role;`,
+    [payload.name, payload.email, payload.phone, payload.id],
   );
   return result;
 };

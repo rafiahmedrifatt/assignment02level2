@@ -5,7 +5,6 @@ import config from "../../config";
 
 const signup = async (payload: Record<string, any>) => {
   const { name, email, password, phone, role } = payload;
-  console.log(payload);
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -19,14 +18,13 @@ const signup = async (payload: Record<string, any>) => {
   const hashedPassword = await bcrypt.hash(password as string, 10);
 
   const result = pool.query(
-    "INSERT INTO users (name, email, password, phone, role) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+    "INSERT INTO users (name, email, password, phone, role) VALUES ($1, $2, $3, $4, $5) RETURNING name, email, phone, role",
     [name, formattedEmail, hashedPassword, phone, role],
   );
   return result;
 };
 
 const loginUser = async (email: string, password: string) => {
-  console.log({ email });
   const result = await pool.query(`SELECT * FROM users WHERE email=$1`, [
     email,
   ]);

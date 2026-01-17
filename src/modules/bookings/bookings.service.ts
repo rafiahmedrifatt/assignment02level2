@@ -5,7 +5,7 @@ const createdBookings = async (payload: Record<string, any>) => {
   const { vehicle_id, rent_start_date, rent_end_date, status } = payload.body;
   try {
     const vehicle = await pool.query(
-      "SELECT availability_status, daily_rent_price FROM vehicles WHERE id = $1",
+      "SELECT vehicle_name, availability_status, daily_rent_price FROM vehicles WHERE id = $1",
       [vehicle_id],
     );
 
@@ -17,17 +17,13 @@ const createdBookings = async (payload: Record<string, any>) => {
     );
     const totalCost = rentalPrice * rentalDays;
 
-    console.log(totalCost);
-
     if (vehicle.rows.length === 0) {
-      return { error: "Vehicle not found" };
+      throw new Error("Vehicle not found");
     }
 
     if (vehicle.rows[0].availability_status !== "available") {
-      return { error: "Vehicle is not available for booking" };
+      throw new Error("Vehicle is not available for booking");
     }
-
-    console.log(payload.user);
 
     const result = await pool.query(
       "INSERT INTO bookings (vehicle_id, customer_id, rent_start_date, rent_end_date, total_price, status) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
@@ -37,7 +33,7 @@ const createdBookings = async (payload: Record<string, any>) => {
         rent_start_date,
         rent_end_date,
         totalCost,
-        status,
+        status || "active",
       ],
     );
     if (result.rows.length > 0) {
@@ -45,7 +41,15 @@ const createdBookings = async (payload: Record<string, any>) => {
         "UPDATE vehicles SET availability_status = 'booked' WHERE id = $1",
         [vehicle_id],
       );
-      return result;
+      return {
+        data: {
+          ...result.rows[0],
+          vehicle: {
+            vehicle_name: vehicle.rows[0].vehicle_name,
+            daily_rent_price: vehicle.rows[0].daily_rent_price,
+          },
+        },
+      };
     } else {
       throw new Error("Booking creation failed");
     }
@@ -65,7 +69,7 @@ const getBookings = async (payload: Record<string, any>, userRole: string) => {
       return result;
     }
     const result = await pool.query("SELECT * FROM bookings");
-    return result;
+    return result.rows;
   } catch (error) {
     console.error("Error retrieving bookings:", error);
     throw new Error("Could not retrieve bookings");
@@ -127,13 +131,12 @@ const updateBookings = async (
         ["cancelled", bookingId],
       );
 
-
       await pool.query(
         `UPDATE vehicles SET availability_status = $1 WHERE id = $2`,
         ["available", booking.vehicle_id],
       );
 
-      return { data: result.rows[0], status: 200 };
+      return { data: result.rows[0] };
     }
 
     // Admin: Mark as "returned" and update vehicle to "available"

@@ -6,7 +6,18 @@ import { updateLanguageServiceSourceFile } from "typescript";
 const getVehicles = async (req: Request, res: Response) => {
   try {
     const result = await vehicleServices.getAllVehicles();
-    res.status(200).json(result.rows);
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: true,
+        message: "No vehicles found",
+        data: result.rows,
+      });
+    }
+    res.status(200).json({
+      success: true,
+      message: "Vehicles retrieved successfully",
+      data: result.rows,
+    });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -27,11 +38,13 @@ const createVehicle = async (req: Request, res: Response) => {
       type,
       registration_number,
       daily_rent_price,
-      availability_status
+      availability_status,
     );
-
-    console.log(result);
-    res.status(201).json(result.rows[0]);
+    res.status(201).json({
+      success: true,
+      message: "Vehicle created successfully",
+      data: result.rows[0],
+    });
   } catch (error) {
     res.status(500).json({ error: "Internal server Error" });
   }
@@ -46,7 +59,11 @@ const getSingleVehicles = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "Vehicle not found" });
     }
 
-    res.status(200).json(result.rows[0]);
+    res.status(200).json({
+      success: true,
+      message: "Vehicle retrieved successfully",
+      data: result.rows[0],
+    });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -72,7 +89,7 @@ const updateVehicle = async (req: Request, res: Response) => {
       type,
       registration_number,
       daily_rent_price,
-      availability_status
+      availability_status,
     );
 
     if (updatedVehicle.rows.length === 0) {
@@ -83,6 +100,7 @@ const updateVehicle = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
+      message: "Vehicle updated successfully",
       data: updatedVehicle.rows[0],
     });
   } catch (error) {
@@ -100,7 +118,9 @@ const deleteVehicle = async (req: Request, res: Response) => {
     if (result.rowCount === 0) {
       res.status(500).json({ message: "no vehicles found" });
     }
-    res.status(200).json({ message: "vehicle deleted successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "vehicle deleted successfully" });
   } catch (error) {
     res.status(500).json({
       message: "internal server error",

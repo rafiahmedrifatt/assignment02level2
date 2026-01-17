@@ -3,9 +3,11 @@ import { authService } from "./auth.service";
 
 const signup = async (req: Request, res: Response) => {
   const result = await authService.signup(req.body);
-  return res
-    .status(201)
-    .json({ message: "User signed up successfully", data: result.rows[0] });
+  return res.status(201).json({
+    success: true,
+    message: "User registered successfully",
+    data: result.rows[0],
+  });
 };
 
 const loginUser = async (req: Request, res: Response) => {
@@ -14,9 +16,8 @@ const loginUser = async (req: Request, res: Response) => {
 
   try {
     const result = await authService.loginUser(email, password);
-    // console.log(result.rows[0]);
     res.status(200).json({
-      success: false,
+      success: true,
       message: "login successful",
       data: result,
     });
