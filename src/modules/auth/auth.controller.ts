@@ -10,6 +10,7 @@ const signup = async (req: Request, res: Response) => {
 
 const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
+  console.log(email, password);
 
   try {
     const result = await authService.loginUser(email, password);

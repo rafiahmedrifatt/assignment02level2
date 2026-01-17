@@ -11,7 +11,7 @@ const signup = async (payload: Record<string, any>) => {
 
   if (email && !emailRegex.test(email as string)) {
     throw new Error(
-      "invalid email format. please provide a valid email address"
+      "invalid email format. please provide a valid email address",
     );
   }
 
@@ -20,7 +20,7 @@ const signup = async (payload: Record<string, any>) => {
 
   const result = pool.query(
     "INSERT INTO users (name, email, password, phone, role) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-    [name, formattedEmail, hashedPassword, phone, role]
+    [name, formattedEmail, hashedPassword, phone, role],
   );
   return result;
 };
@@ -31,7 +31,6 @@ const loginUser = async (email: string, password: string) => {
     email,
   ]);
 
-  console.log({ result });
   if (result.rows.length === 0) {
     throw new Error("User not found");
   }
@@ -45,11 +44,11 @@ const loginUser = async (email: string, password: string) => {
   }
 
   const token = jwt.sign(
-    { name: user.name, email: user.email, role: user.role },
+    { id: user.id, name: user.name, email: user.email, role: user.role },
     config.jwtSecret as string,
     {
       expiresIn: "7d",
-    }
+    },
   );
   delete user.password;
 
