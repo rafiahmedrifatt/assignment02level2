@@ -1,32 +1,16 @@
 # 🚗 Vehicle Rental System
 
-A comprehensive backend API for managing vehicle rentals, built with Node.js, TypeScript, and PostgreSQL. This system provides secure authentication, role-based access control, and complete vehicle rental management functionality.
+A backend API for managing vehicle rentals, built with Node.js, TypeScript, and PostgreSQL.
 
-## 📋 Table of Contents
-
-- [Features](#-features)
-- [Technology Stack](#-technology-stack)
-- [Prerequisites](#-prerequisites)
-- [Installation](#-installation)
-- [Environment Variables](#-environment-variables)
-- [Database Setup](#-database-setup)
-- [Running the Application](#-running-the-application)
-- [API Documentation](#-api-documentation)
-- [Project Structure](#-project-structure)
-- [Authentication](#-authentication)
-- [User Roles](#-user-roles)
-- [Contributing](#-contributing)
-- [License](#-license)
+**Live Repository**: [https://github.com/rafiahmedrifatt/vehicle-rental-system-backend](https://github.com/rafiahmedrifatt/vehicle-rental-system-backend)
 
 ## ✨ Features
 
-- **Vehicle Management** - Complete CRUD operations for vehicle inventory with availability tracking
-- **Customer Management** - User registration, profile management, and account control
-- **Booking System** - Handle vehicle rentals with automatic cost calculation and status tracking
-- **Role-Based Access Control** - Separate permissions for Admin and Customer roles
-- **JWT Authentication** - Secure token-based authentication system
-- **Password Security** - bcrypt password hashing for enhanced security
-- **Automated Status Updates** - Auto-update booking and vehicle status based on rental periods
+- Vehicle inventory management with availability tracking
+- User registration and authentication with JWT
+- Role-based access (Admin and Customer)
+- Booking management with automatic price calculation
+- Secure password hashing with bcrypt
 
 ## 🛠️ Technology Stack
 
@@ -48,46 +32,34 @@ Before you begin, ensure you have the following installed:
 ## 🚀 Installation
 
 1. Clone the repository:
-
 ```bash
 git clone https://github.com/rafiahmedrifatt/vehicle-rental-system-backend.git
 cd vehicle-rental-system-backend
 ```
 
 2. Install dependencies:
-
 ```bash
 npm install
 ```
 
 ## 🔧 Environment Variables
 
-Create a `.env` file in the root directory and add the following variables:
+Create a `.env` file in the root directory:
 
 ```env
-# Server Configuration
-PORT=5000
-NODE_ENV=development
-
-# Database Configuration
+PORT=3000
 DB_HOST=localhost
 DB_PORT=5432
 DB_USER=your_database_user
 DB_PASSWORD=your_database_password
 DB_NAME=vehicle_rental_db
-
-# JWT Configuration
-JWT_SECRET=your_super_secret_jwt_key
+JWT_SECRET=your_secret_key
 JWT_EXPIRES_IN=7d
-
-# Bcrypt Configuration
-BCRYPT_SALT_ROUNDS=10
 ```
 
 ## 🗄️ Database Setup
 
 1. Create a PostgreSQL database:
-
 ```sql
 CREATE DATABASE vehicle_rental_db;
 ```
@@ -142,32 +114,28 @@ CREATE INDEX idx_bookings_vehicle ON bookings(vehicle_id);
 ## ▶️ Running the Application
 
 ### Development Mode
-
 ```bash
 npm run dev
 ```
 
 ### Production Mode
-
 ```bash
 npm run build
 npm start
 ```
 
-The server will start on `http://localhost:5000` (or the PORT specified in your .env file).
+The server will start on `http://localhost:3000`.
 
 ## 📚 API Documentation
 
 ### Base URL
-
 ```
-http://localhost:5000/api/v1
+http://localhost:3000/api/v1
 ```
 
 ### Authentication Endpoints
 
 #### Register User
-
 ```http
 POST /api/v1/auth/signup
 Content-Type: application/json
@@ -182,7 +150,6 @@ Content-Type: application/json
 ```
 
 #### Login
-
 ```http
 POST /api/v1/auth/signin
 Content-Type: application/json
@@ -196,7 +163,6 @@ Content-Type: application/json
 ### Vehicle Endpoints
 
 #### Create Vehicle (Admin Only)
-
 ```http
 POST /api/v1/vehicles
 Authorization: Bearer <token>
@@ -212,19 +178,16 @@ Content-Type: application/json
 ```
 
 #### Get All Vehicles
-
 ```http
 GET /api/v1/vehicles
 ```
 
 #### Get Vehicle by ID
-
 ```http
 GET /api/v1/vehicles/:vehicleId
 ```
 
 #### Update Vehicle (Admin Only)
-
 ```http
 PUT /api/v1/vehicles/:vehicleId
 Authorization: Bearer <token>
@@ -237,7 +200,6 @@ Content-Type: application/json
 ```
 
 #### Delete Vehicle (Admin Only)
-
 ```http
 DELETE /api/v1/vehicles/:vehicleId
 Authorization: Bearer <token>
@@ -246,14 +208,12 @@ Authorization: Bearer <token>
 ### User Endpoints
 
 #### Get All Users (Admin Only)
-
 ```http
 GET /api/v1/users
 Authorization: Bearer <token>
 ```
 
 #### Update User
-
 ```http
 PUT /api/v1/users/:userId
 Authorization: Bearer <token>
@@ -266,7 +226,6 @@ Content-Type: application/json
 ```
 
 #### Delete User (Admin Only)
-
 ```http
 DELETE /api/v1/users/:userId
 Authorization: Bearer <token>
@@ -275,7 +234,6 @@ Authorization: Bearer <token>
 ### Booking Endpoints
 
 #### Create Booking
-
 ```http
 POST /api/v1/bookings
 Authorization: Bearer <token>
@@ -289,14 +247,12 @@ Content-Type: application/json
 ```
 
 #### Get Bookings
-
 ```http
 GET /api/v1/bookings
 Authorization: Bearer <token>
 ```
 
 #### Update Booking Status
-
 ```http
 PUT /api/v1/bookings/:bookingId
 Authorization: Bearer <token>
@@ -367,14 +323,12 @@ This API uses JWT (JSON Web Tokens) for authentication. To access protected endp
 ## 👥 User Roles
 
 ### Admin
-
 - Full access to all system features
 - Manage all vehicles, users, and bookings
 - Update user roles
 - Delete users and vehicles (with constraints)
 
 ### Customer
-
 - Register and manage own profile
 - View available vehicles
 - Create and manage own bookings
@@ -390,12 +344,13 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
 ## 👨‍💻 Author
 
 **Rafi Ahmed**
-
 - GitHub: [@rafiahmedrifatt](https://github.com/rafiahmedrifatt)
-
----
 
 **Happy Coding! 🚀**
